@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Uebung2</string>
+    <string name="menu_settings">Settings</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="mul">*</string>
+    <string name="div">/</string>
 </resources>
