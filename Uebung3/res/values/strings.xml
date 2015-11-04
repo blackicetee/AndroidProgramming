@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Uebung3</string>
+    <string name="nameForBtnColor">Color</string>
+    <string name="nameForBtnAlignment">Alignment</string>
+    <string name="nameForBtnFont">Font</string>
+    <string name="nameForBtnTest">Test</string>
+</resources>

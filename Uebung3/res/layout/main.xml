@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:weightSum="1" android:orientation="vertical">
+    <EditText
+            android:layout_width="231dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/etPlain" android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/btnTopMargin"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/btnTopMargin">
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nameForBtnColor"
+                android:id="@+id/btnColor" android:layout_gravity="center_vertical"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nameForBtnAlignment"
+                android:id="@+id/btnAlignment" android:layout_gravity="center_vertical"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nameForBtnFont"
+                android:id="@+id/btnFont" android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+    <Button
+            android:layout_width="237dp"
+            android:layout_height="wrap_content"
+            android:text="@string/nameForBtnTest"
+            android:id="@+id/btnTest" android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/btnTopMargin"/>
+</LinearLayout>
+

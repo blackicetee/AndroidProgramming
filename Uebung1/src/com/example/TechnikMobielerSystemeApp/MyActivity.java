@@ -29,8 +29,7 @@ public class MyActivity extends Activity {
             public void onClick(View v) {
                 if (textView1.getText().equals(getString(R.string.hello))) {
                     textView1.setText(R.string.goodNight);
-                }
-                else if (textView1.getText().equals(getString(R.string.goodNight))) {
+                } else if (textView1.getText().equals(getString(R.string.goodNight))) {
                     textView1.setText(R.string.hello);
                 }
             }
