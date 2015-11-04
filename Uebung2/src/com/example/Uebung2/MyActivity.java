@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -82,7 +83,7 @@ public class MyActivity extends Activity implements View.OnClickListener {
                 break;
         }
         //create an output String
-        tvResult.setText(num1 + " " + oper + " " + num2 + " = " + result);
+        tvResult.setText("=" + num1 + " " + oper + " " + num2 + " = " + result);
     }
 
     @Override
@@ -90,5 +91,23 @@ public class MyActivity extends Activity implements View.OnClickListener {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         menu.add(0, MENU_RESET_ID, 0, "Reset");
         menu.add(0, MENU_QUIT_ID, 0, "Quit");
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_RESET_ID:
+                //clear input & output fields
+                etNum1.setText("");
+                etNum2.setText("");
+                tvResult.setText("");
+                break;
+            case MENU_QUIT_ID:
+                //exit
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
