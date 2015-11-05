@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="btnTopMargin">30dp</dimen>
+    <dimen name="textSmall">8dp</dimen>
+    <dimen name="textMedium">40dp</dimen>
+    <dimen name="textLarge">80dp</dimen>
 </resources>

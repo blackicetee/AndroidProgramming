@@ -2,6 +2,7 @@ package com.example.Uebung3;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -35,13 +36,13 @@ public class FontActivity extends Activity implements View.OnClickListener {
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.btnSmall:
-                intent.putExtra("font", Gravity.LEFT);
+                intent.putExtra("font", 10);
                 break;
             case R.id.btnMedium:
-                intent.putExtra("font", Gravity.CENTER);
+                intent.putExtra("font", 30);
                 break;
             case R.id.btnLarge:
-                intent.putExtra("font", Gravity.RIGHT);
+                intent.putExtra("font", 50);
                 break;
         }
         setResult(RESULT_OK, intent);

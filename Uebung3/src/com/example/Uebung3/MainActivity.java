@@ -2,10 +2,14 @@ package com.example.Uebung3;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     /**
@@ -61,6 +65,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btnTest:
                 intent = new Intent(this, TestActivity.class);
+                intent.putExtra("EditTextInput", etPlain.getText().toString());
+                Log.d("MyLog", intent.getStringExtra("EditTextInput"));
                 startActivityForResult(intent, REQUEST_CODE_TEST);
                 break;
         }
@@ -68,6 +74,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        
+        Log.d("myLogs", "requestCode = " + requestCode + ", resultCode = " + resultCode);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_COLOR:
+                    int color = data.getIntExtra("color", Color.WHITE);
+                    etPlain.setTextColor(color);
+                    break;
+                case REQUEST_CODE_ALIGNMENT:
+                    int alignment = data.getIntExtra("alignment", Gravity.LEFT);
+                    etPlain.setGravity(alignment);
+                    break;
+                case REQUEST_CODE_FONT:
+                    int font = data.getIntExtra("font", 30);
+                    etPlain.setTextSize(font);
+                    break;
+                case REQUEST_CODE_TEST:
+                    String test = data.getStringExtra("test");
+                    Toast.makeText(this, test, Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
     }
 }
