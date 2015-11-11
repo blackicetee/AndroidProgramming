@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Uebung4</string>
+    <string name="showTime">Show time</string>
+    <string name="showDate">Show date</string>
+    <string name="dateBasic">Date basic</string>
+</resources>
