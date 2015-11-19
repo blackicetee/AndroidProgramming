@@ -7,7 +7,7 @@
     <ListView
             android:layout_width="match_parent"
             android:layout_height="252dp"
-            android:id="@+id/lvMain" android:layout_weight="0.96"/>
+            android:id="@+id/lvMain" android:layout_weight="0.03"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

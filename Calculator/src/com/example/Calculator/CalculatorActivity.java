@@ -32,6 +32,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
     Button btnMul;
     Button btnDiv;
 
+    Button btnC;
     Button btnEquals;
 
     Double result = 0.0;
@@ -59,6 +60,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         btnSub = (Button) findViewById(R.id.btnSub);
         btnMul = (Button) findViewById(R.id.btnMul);
         btnDiv = (Button) findViewById(R.id.btnDiv);
+        btnC = (Button) findViewById(R.id.btnC);
         btnEquals = (Button) findViewById(R.id.btnEquals);
 
         btnZero.setOnClickListener(this);
@@ -76,6 +78,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         btnSub.setOnClickListener(this);
         btnMul.setOnClickListener(this);
         btnDiv.setOnClickListener(this);
+        btnC.setOnClickListener(this);
         btnEquals.setOnClickListener(this);
     }
 
@@ -171,33 +174,40 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
                 }
                 break;
             case R.id.btnC:
-                Toast.makeText(this, "??????", Toast.LENGTH_LONG).show();
                 result = 0.0;
                 tvMain.setText("");
+                sign = 's';
                 break;
             case R.id.btnEquals:
-                if (!tvMain.getText().toString().isEmpty()) {
-                    switch (sign) {
-                        case '+':
-                            result += Double.parseDouble(tvMain.getText().toString());
-                            break;
-                        case '-':
-                            result -= Double.parseDouble(tvMain.getText().toString());
-                            break;
-                        case '*':
-                            result *= Double.parseDouble(tvMain.getText().toString());
-                            break;
-                        case '/':
-                            result /= Double.parseDouble(tvMain.getText().toString());
-                            break;
+                if (tvMain.getText().toString().equals("Large Text")) {
+                    Toast.makeText(this, "Please enter an equation or a single term!", Toast.LENGTH_LONG).show();
+                } else {
+                    if (!tvMain.getText().toString().isEmpty()) {
+                        switch (sign) {
+                            case '+':
+                                result += Double.parseDouble(tvMain.getText().toString());
+                                break;
+                            case '-':
+                                result -= Double.parseDouble(tvMain.getText().toString());
+                                break;
+                            case '*':
+                                result *= Double.parseDouble(tvMain.getText().toString());
+                                break;
+                            case '/':
+                                result /= Double.parseDouble(tvMain.getText().toString());
+                                break;
+                            case 's':
+                                result += Double.parseDouble(tvMain.getText().toString());
+                                break;
+                        }
+                        tvMain.setText("");
                     }
-                    tvMain.setText("");
+                    //Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent();
+                    intent.putExtra("CalculatedResult", result);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
-                //Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent();
-                intent.putExtra("CalculatedResult", result);
-                setResult(RESULT_OK, intent);
-                finish();
                 break;
         }
     }

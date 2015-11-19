@@ -41,7 +41,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnClac:
-                if (resultList.size() < 10) {
+                if (resultList.size() < 15) {
                     Intent intent = new Intent("htw.berlin.s0539757.intent.action.Calculator");
                     startActivityForResult(intent, 1);
                 }
