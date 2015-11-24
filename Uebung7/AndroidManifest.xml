@@ -4,6 +4,7 @@
           android:versionCode="1"
           android:versionName="1.0">
     <uses-sdk android:minSdkVersion="19"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
         <activity android:name="MainActivity"
                   android:label="@string/app_name">
@@ -15,6 +16,24 @@
         <activity android:name=".GoogleSearchActivity" android:label="GoogleSearch">
             <intent-filter>
                 <action android:name="htw.berlin.s0539757.intent.action.searchGoogle"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".Contact2" android:label="Edit or show contact 2?">
+            <intent-filter>
+                <action android:name="htw.berlin.s0539757.intent.action.editOrShowContact2"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".EditContact2" android:label="Edit contact #2">
+            <intent-filter>
+                <action android:name="htw.berlin.s0539757.intent.action.editContact2"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".Call" android:label="Call">
+            <intent-filter>
+                <action android:name="htw.berlin.s0539757.intent.action.call"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>

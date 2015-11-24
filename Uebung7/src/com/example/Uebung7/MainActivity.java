@@ -70,10 +70,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 startActivity(googleMapsIntent);
                 break;
             case R.id.btnContact2:
-                Intent contact2Intent = new Intent(Intent.ACTION_INSERT_OR_EDIT)
+                Intent contact2Intent = new Intent("htw.berlin.s0539757.intent.action.editOrShowContact2");
+                startActivity(contact2Intent);
                 break;
             case R.id.btnCall:
-
+                Intent callIntent = new Intent("htw.berlin.s0539757.intent.action.call");
+                startActivity(callIntent);
                 break;
             case R.id.btnSetAlarm:
 
