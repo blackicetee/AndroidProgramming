@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:weightSum="1">
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
+            >
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Open Google"
+                android:id="@+id/btnOpenGoogle"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search in Google"
+                android:id="@+id/btnSearchInGoogle"/>
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Google Maps HTW"
+                android:id="@+id/btnGoogleMapsHTW"/>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Contact #2"
+                android:id="@+id/btnContact2"/>
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Call number"
+                android:id="@+id/btnCall"/>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Set Alarm"
+                android:id="@+id/btnSetAlarm"/>
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Set Term"
+                android:id="@+id/btnSetTerm"/>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="E-Mail"
+                android:id="@+id/btnEmail"/>
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SMS"
+                android:id="@+id/btnSMS"/>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="FN1"
+                android:id="@+id/btnFN1"/>
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+    </LinearLayout>
+</LinearLayout>
+
