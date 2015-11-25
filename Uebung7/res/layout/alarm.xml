@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:weightSum="1">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="alarm massage"
+            android:id="@+id/tvAlarmMassage" android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/googleSearchSize"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etAlarmMassage" android:layout_gravity="center_horizontal" android:layout_weight="0.04"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="alarm hours"
+            android:id="@+id/tvAlarmHours" android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/googleSearchSize"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etAlarmHours" android:layout_gravity="center_horizontal" android:layout_weight="0.04"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="alarm minutes"
+            android:id="@+id/tvAlarmMinutes" android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/googleSearchSize"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etAlarmMinutes" android:layout_gravity="center_horizontal" android:layout_weight="0.04"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set Alarm"
+            android:id="@+id/btnActivateAlarm" android:layout_gravity="center_horizontal"/>
+</LinearLayout>

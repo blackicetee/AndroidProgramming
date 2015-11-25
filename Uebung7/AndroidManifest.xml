@@ -5,6 +5,7 @@
           android:versionName="1.0">
     <uses-sdk android:minSdkVersion="19"/>
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
         <activity android:name="MainActivity"
                   android:label="@string/app_name">
@@ -37,5 +38,12 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".Alarm" android:label="Alarm">
+            <intent-filter>
+                <action android:name="htw.berlin.s0539757.intent.action.SET_ALARM"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".TimeTable" android:label="TimeTable"/>
     </application>
 </manifest>

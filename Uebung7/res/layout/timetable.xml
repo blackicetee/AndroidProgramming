@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:weightSum="1">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="alarm massage"
+            android:id="@+id/tvAlarmMassage" android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/googleSearchSize"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etAlarmMassage" android:layout_gravity="center_horizontal" android:layout_weight="0.04"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:id="@+id/tvLocation" android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/googleSearchSize"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etLocation" android:layout_gravity="center_horizontal" android:layout_weight="0.04"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Date"
+            android:id="@+id/tvCalendarStart" android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/googleSearchSize"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etCalendarStart" android:layout_gravity="center_horizontal" android:layout_weight="0.04"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End Date"
+            android:id="@+id/tvCalendarEnd" android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/googleSearchSize"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etCalendarEnd" android:layout_gravity="center_horizontal" android:layout_weight="0.04"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set Alarm"
+            android:id="@+id/btnActivateAlarm" android:layout_gravity="center_horizontal"/>
+</LinearLayout>

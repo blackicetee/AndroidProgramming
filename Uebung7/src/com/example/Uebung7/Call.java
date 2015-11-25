@@ -33,7 +33,7 @@ public class Call extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btnDial:
                 if (!etDial.getText().toString().isEmpty()) {
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
                     callIntent.setData(Uri.parse("tel:" + etDial.getText().toString()));
                     startActivity(callIntent);
                 } else {

@@ -78,7 +78,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 startActivity(callIntent);
                 break;
             case R.id.btnSetAlarm:
-
+                Intent alarmIntent = new Intent("htw.berlin.s0539757.intent.action.SET_ALARM");
+                startActivity(alarmIntent);
                 break;
             case R.id.btnSetTerm:
 

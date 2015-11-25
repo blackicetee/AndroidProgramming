@@ -44,8 +44,7 @@ public class EditContact2 extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btnEdit:
                 Uri contact2Uri = Uri.parse("content://contacts/people/2");
-                Intent editIntent = new Intent(Intents.Insert.ACTION, Contacts.CONTENT_LOOKUP_URI + "/" + "content://contacts/people/2");
-                editIntent.setType(Contacts.CONTENT_ITEM_TYPE);
+                Intent editIntent = new Intent(Intent.ACTION_EDIT, contact2Uri);
                 if (!etContactName.getText().toString().isEmpty()) {
                     editIntent.putExtra(ContactsContract.Intents.Insert.NAME, etContactName.getText().toString());
                 }
