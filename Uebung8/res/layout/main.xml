@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:weightSum="1">
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ID, Name, Static-Phone, MobilePhone, Room TV option"
+            android:id="@+id/textView" android:layout_gravity="center_horizontal" android:layout_weight="0.09"
+            android:textAlignment="center" android:textSize="24dp"/>
+    <ListView
+            android:layout_width="match_parent"
+            android:layout_height="252dp"
+            android:id="@+id/lvMain" android:layout_weight="0.03"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show Employees"
+            android:id="@+id/btnShowEmployees" android:layout_gravity="center_horizontal"/>
+</LinearLayout>
+

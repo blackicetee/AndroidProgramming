@@ -45,11 +45,20 @@
                   android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SMS"
                 android:id="@+id/btnSMS"/>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="FN1"
-                android:id="@+id/btnFN1"/>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gallery"
+                android:id="@+id/btnGallery"/>
     </LinearLayout>
     <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
                   android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
     </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Photo"
+                android:id="@+id/btnPhoto"/>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Video"
+                android:id="@+id/btnVideo"/>
+    </LinearLayout>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Vibrate"
+            android:id="@+id/btnVibrate" android:layout_gravity="center_horizontal"/>
 </LinearLayout>
 

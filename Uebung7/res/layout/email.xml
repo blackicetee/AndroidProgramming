@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:weightSum="1">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="email addresses"
+            android:id="@+id/tvEmailAddresses" android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/googleSearchSize"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etEmailAddresses" android:layout_gravity="center_horizontal" android:layout_weight="0.04"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="subject"
+            android:id="@+id/tvSubject" android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/googleSearchSize"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etSubject" android:layout_gravity="center_horizontal" android:layout_weight="0.04"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="attachments"
+            android:id="@+id/tvAttachments" android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/googleSearchSize"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etAttachments" android:layout_gravity="center_horizontal" android:layout_weight="0.04"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send Email"
+            android:id="@+id/btnSendEmail" android:layout_gravity="center_horizontal"/>
+</LinearLayout>

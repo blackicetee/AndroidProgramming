@@ -18,7 +18,7 @@ public class Alarm extends Activity implements View.OnClickListener {
     EditText etAlarmHours;
     EditText etAlarmMinutes;
     Button btnActivateAlarm;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,27 +42,26 @@ public class Alarm extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btnActivateAlarm:
                 String massage = "Default Alarm";
-                String hours = "0";
-                String minutes = "0";
+                int hours = 0;
+                int minutes = 0;
                 if (!etAlarmMassage.getText().toString().isEmpty()) {
                     massage =  etAlarmMassage.getText().toString();
                 }
                 if (!etAlarmHours.getText().toString().isEmpty()) {
-                    hours = etAlarmHours.getText().toString();
+                    hours = Integer.parseInt(etAlarmHours.getText().toString());
                 }
                 if (!etAlarmMinutes.getText().toString().isEmpty()) {
-                    minutes = etAlarmMinutes.getText().toString();
+                    minutes = Integer.parseInt(etAlarmMinutes.getText().toString());
                 }
                 if (!(etAlarmMassage.getText().toString().isEmpty() && etAlarmHours.getText().toString().isEmpty() && etAlarmMinutes.getText().toString().isEmpty())) {
                     Intent alarmIntent = new Intent(AlarmClock.ACTION_SET_ALARM)
-                        .putExtra(AlarmClock.EXTRA_MESSAGE, massage)
-                        .putExtra(AlarmClock.EXTRA_HOUR, hours)
-                        .putExtra(AlarmClock.EXTRA_MINUTES, minutes);
+                            .putExtra(AlarmClock.EXTRA_MESSAGE, massage)
+                            .putExtra(AlarmClock.EXTRA_HOUR, hours)
+                            .putExtra(AlarmClock.EXTRA_MINUTES, minutes);
                     if (alarmIntent.resolveActivity(getPackageManager()) != null) {
                         startActivity(alarmIntent);
                     }
                 }
-                finish();
                 break;
         }
     }
