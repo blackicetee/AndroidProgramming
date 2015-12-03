@@ -93,6 +93,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     + "mobilePhoneID text primary key,"
                     + "mobilePhoneNumber text,"
                     + "peopleID text" + ");");
+
+            db.execSQL("create table position("
+                    + "positionID text primary key,"
+                    + "mobilePhoneNumber text,"
+                    + "peopleID text" + ");");
         }
 
         @Override
