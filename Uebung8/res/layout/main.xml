@@ -7,7 +7,7 @@
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ID, Name, Static-Phone, MobilePhone, Room TV option"
+            android:text="ID, Name, Static-Phone, MobilePhone, Room"
             android:id="@+id/textView" android:layout_gravity="center_horizontal" android:layout_weight="0.09"
             android:textAlignment="center" android:textSize="24dp"/>
     <ListView
@@ -17,7 +17,7 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Show Employees"
-            android:id="@+id/btnShowEmployees" android:layout_gravity="center_horizontal"/>
+            android:text="Show People"
+            android:id="@+id/btnShowPeople" android:layout_gravity="center_horizontal"/>
 </LinearLayout>
 
