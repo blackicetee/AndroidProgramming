@@ -4,20 +4,45 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:weightSum="1">
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ID, Name, Static-Phone, MobilePhone, Room"
-            android:id="@+id/textView" android:layout_gravity="center_horizontal" android:layout_weight="0.09"
-            android:textAlignment="center" android:textSize="24dp"/>
     <ListView
             android:layout_width="match_parent"
             android:layout_height="252dp"
             android:id="@+id/lvMain" android:layout_weight="0.03"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show all people"
+                android:id="@+id/btnShowPeople"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select person"
+                android:id="@+id/btnSelect"/>
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:id="@+id/linearLayout" android:layout_gravity="center_horizontal">
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Edit last person"
+                android:id="@+id/btnEdit"/>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Search in DB"
+                android:id="@+id/btnSearch"/>
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
+            >
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Call last person"
+                android:id="@+id/btnCall"/>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Drop last person"
+                android:id="@+id/btnDrop"/>
+    </LinearLayout>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Show People"
-            android:id="@+id/btnShowPeople" android:layout_gravity="center_horizontal"/>
+            android:text="Close"
+            android:id="@+id/btnClose" android:layout_gravity="center_horizontal" android:layout_weight="0.03"/>
 </LinearLayout>
 
