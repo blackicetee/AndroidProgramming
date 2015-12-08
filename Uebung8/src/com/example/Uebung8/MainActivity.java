@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     Button btnCall;
     Button btnDrop;
     Button btnClose;
-    List<List<String>> table;
+    List<List<String>> table = null;
     DBHelper dbHelper;
     SQLiteDatabase db;
 
@@ -97,16 +97,32 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btnSelect:
                 Intent selectIntent = new Intent(this, Select.class);
-                startActivityForResult(selectIntent, 1);
+                startActivityForResult(selectIntent, 0);
                 break;
             case R.id.btnEdit:
+                if (table == null) {
+                    Toast.makeText(this, "The list is empty!", Toast.LENGTH_LONG).show();
+                }
+                else if (!table.isEmpty()) {
+                    Intent editIntent = new Intent(this, Edit.class);
+                    editIntent.putExtra("UpdateName", table.get(table.size() - 1).get(1));
+                    editIntent.putExtra("UpdateRoomID", table.get(table.size() - 1).get(2));
+                    editIntent.putExtra("UpdateStaticPhoneID", table.get(table.size() - 1).get(3));
+                    editIntent.putExtra("UpdateMobilePhoneID", table.get(table.size() - 1).get(4));
+                    editIntent.putExtra("UpdatePosition", table.get(table.size() - 1).get(5));
+                    startActivityForResult(editIntent, 1);
+                }
+                else {
+                    Toast.makeText(this, "The list is empty!", Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.btnSearch:
                 break;
             case R.id.btnCall:
                 break;
             case R.id.btnDrop:
-
+                if (dropLastTableElement())
+                    insertTableInList(table);
                 break;
             case R.id.btnClose:
                 MainActivity.finishAll();
@@ -118,19 +134,52 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {
-            return;
+        switch (requestCode) {
+            case 0:
+                if (data == null) {
+                    return;
+                }
+                Log.d(LOG_TAG, "--- onActivityResult Select person---");
+                String[] query = {data.getStringExtra("SelectQuery")};
+                String selectPersonQuery = dbHelper.RAWQUERY + " where name = ? ";
+                Log.d(LOG_TAG, selectPersonQuery);
+                List<List<String>> tempTable = dbHelper.getAllInformation(db.rawQuery(selectPersonQuery, query));
+                if (tempTable.size() > 0) {
+                    if (table == null)
+                        table = tempTable;
+                    else
+                        table.add(tempTable.get(0));
+                    insertTableInList(table);
+                }
+                else
+                    Toast.makeText(this, "No such person found!", Toast.LENGTH_LONG).show();
+                break;
+            case 1:
+                if (data == null) {
+                    return;
+                }
+                Log.d(LOG_TAG, "--- onActivityResult Edit person---");
+                String lastPersonID = table.get(table.size() - 1).get(0);
+                dbHelper.updatePeople(db, lastPersonID, data.getStringExtra("UpdateName"), data.getStringExtra("UpdateRoomID"), data.getStringExtra("UpdateStaticPhoneID"), data.getStringExtra("UpdateMobilePhoneID"), data.getStringExtra("UpdatePositionID"));
+                break;
         }
-        String[] query = {data.getStringExtra("SelectQuery")};
-        String selectPersonQuery = dbHelper.RAWQUERY + " where name = ? ";
-        Toast.makeText(this, selectPersonQuery, Toast.LENGTH_LONG).show();
-        Log.d(LOG_TAG, selectPersonQuery);
-        List<String> l = new ArrayList<>(dbHelper.getAllInformation(db.rawQuery(selectPersonQuery, query)).get(0));
-        if (table.isEmpty())
-            table = dbHelper.getAllInformation(db.rawQuery(selectPersonQuery, query));
-        else
-            table.add(dbHelper.getAllInformation(db.rawQuery(selectPersonQuery, query)).get(0));
-        insertTableInList(table);
+
+    }
+
+    private boolean dropLastTableElement() {
+        if (table == null) {
+            Toast.makeText(this, "The list is empty!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else if (!table.isEmpty()) {
+            table.remove(table.size() - 1);
+            return true;
+        }
+        else {
+            Toast.makeText(this, "The list is empty!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
     }
 
     private void insertTableInList(List<List<String>> table) {
@@ -149,7 +198,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     class DBHelper extends SQLiteOpenHelper {
 
-        public static final String RAWQUERY = "select name, roomName, staticPhoneNumber, mobilePhoneNumber, positionName "
+        public static final String RAWQUERY = "select PL.peopleID, name, roomName, staticPhoneNumber, mobilePhoneNumber, positionName "
                 + "from people as PL "
                 + "left join room as RM on PL.roomID = RM.roomID "
                 + "left join staticPhone as SP on PL.staticPhoneID = SP.staticPhoneID "
@@ -218,6 +267,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Log.d(LOG_TAG, "row inserted, ID = peopleID_" + padding + rowID);
         }
 
+        public void updatePeople(SQLiteDatabase db, String peopleID, String name, String roomID, String staticPhoneID, String mobilePhoneID, String positionID) {
+            Log.d(LOG_TAG, "--- on updatePeople ---");
+            ContentValues cv = new ContentValues();
+            cv.put("name", name);
+            cv.put("roomID", roomID);
+            cv.put("staticPhoneID", staticPhoneID);
+            cv.put("mobilePhoneID", mobilePhoneID);
+            cv.put("positionID", positionID);
+            String[] whereArg= {peopleID};
+            long rowID = db.update("people", cv, " where peopleID = ? ", whereArg);
+            String padding = "";
+            if (rowID < 10) padding = "00";
+            if (rowID >= 10 && rowID < 100) padding = "0";
+            Log.d(LOG_TAG, "row updated, ID = peopleID_" + padding + rowID);
+        }
+
         public void addRoom(SQLiteDatabase db, String roomID, String roomName) {
             Log.d(LOG_TAG, "--- on addRoom ---");
             ContentValues cv = new ContentValues();
@@ -273,6 +338,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             List<List<String>> table = new ArrayList<>();
             if (c.moveToFirst()) {
                 //find the column numbers using names
+                int peopleIDColIndex = c.getColumnIndex("peopleID");
                 int nameColIndex = c.getColumnIndex("name");
                 int roomColIndex = c.getColumnIndex("roomName");
                 int staticPhoneColIndex = c.getColumnIndex("staticPhoneNumber");
@@ -280,6 +346,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 int positionColIndex = c.getColumnIndex("positionName");
                 do {
                     List<String> temp = new ArrayList<>();
+                    temp.add("ID: " + c.getString(peopleIDColIndex));
                     temp.add("Name: " + c.getString(nameColIndex));
                     temp.add("Room: " + c.getString(roomColIndex));
                     temp.add("StaticPhoneNr: " + c.getString(staticPhoneColIndex));
@@ -288,7 +355,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     table.add(temp);
 
                     Log.d(LOG_TAG,
-                            "NAME = " + c.getString(nameColIndex) +
+                            "People ID = " + c.getString(peopleIDColIndex) +
+                                    ", NAME = " + c.getString(nameColIndex) +
                                     ", ROOM = " + c.getString(roomColIndex) +
                                     ", STATIC-PHONE = " + c.getString(staticPhoneColIndex) +
                                     ", MOBILE-PHONE = " + c.getString(mobilePhoneColIndex) +
