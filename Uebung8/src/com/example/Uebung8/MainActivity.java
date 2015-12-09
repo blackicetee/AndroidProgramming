@@ -104,12 +104,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     Toast.makeText(this, "The list is empty!", Toast.LENGTH_LONG).show();
                 }
                 else if (!table.isEmpty()) {
+                    String[] query = {table.get(table.size() - 1).get(1)};
+                    String editPersonQuery = dbHelper.EDITINFOQUERY + " where name = ? ";
+                    List<List<String>> tempTable = dbHelper.getAllIDsAndName(db.rawQuery(editPersonQuery, query));
                     Intent editIntent = new Intent(this, Edit.class);
-                    editIntent.putExtra("UpdateName", table.get(table.size() - 1).get(1));
-                    editIntent.putExtra("UpdateRoomID", table.get(table.size() - 1).get(2));
-                    editIntent.putExtra("UpdateStaticPhoneID", table.get(table.size() - 1).get(3));
-                    editIntent.putExtra("UpdateMobilePhoneID", table.get(table.size() - 1).get(4));
-                    editIntent.putExtra("UpdatePosition", table.get(table.size() - 1).get(5));
+                    editIntent.putExtra("UpdateName", tempTable.get(tempTable.size() - 1).get(1));
+                    editIntent.putExtra("UpdateRoomID", tempTable.get(tempTable.size() - 1).get(2));
+                    editIntent.putExtra("UpdateStaticPhoneID", tempTable.get(tempTable.size() - 1).get(3));
+                    editIntent.putExtra("UpdateMobilePhoneID", tempTable.get(tempTable.size() - 1).get(4));
+                    editIntent.putExtra("UpdatePosition", tempTable.get(tempTable.size() - 1).get(5));
                     startActivityForResult(editIntent, 1);
                 }
                 else {
@@ -117,8 +120,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
                 break;
             case R.id.btnSearch:
+                Intent searchIntent = new Intent(this, Search.class);
+                startActivityForResult(searchIntent, 2);
                 break;
             case R.id.btnCall:
+                if (table == null) {
+                    Toast.makeText(this, "No static number found!", Toast.LENGTH_LONG).show();
+                }
+                else if (table.size() > 0) {
+                    String staticNumber = table.get(table.size() - 1).get(3);
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                    callIntent.setData(Uri.parse("tel:" + staticNumber));
+                    startActivity(callIntent);
+                }
+                else {
+                    Toast.makeText(this, "No static number found!", Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.btnDrop:
                 if (dropLastTableElement())
@@ -132,6 +149,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
+    private void searchQueryAndInsertInListView(String[] whereArgs, String rawQuery) {
+        List<List<String>> tempTable = dbHelper.getAllInformation(db.rawQuery(rawQuery, whereArgs));
+        if (tempTable.size() > 0) {
+            if (table == null)
+                table = tempTable;
+            else {
+                for (int i = 0; i < tempTable.size(); i++) {
+                    table.add(tempTable.get(i));
+                }
+            }
+            insertTableInList(table);
+        }
+        else
+            Toast.makeText(this, "Not found in DB!", Toast.LENGTH_LONG).show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -140,19 +173,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     return;
                 }
                 Log.d(LOG_TAG, "--- onActivityResult Select person---");
-                String[] query = {data.getStringExtra("SelectQuery")};
-                String selectPersonQuery = dbHelper.RAWQUERY + " where name = ? ";
-                Log.d(LOG_TAG, selectPersonQuery);
-                List<List<String>> tempTable = dbHelper.getAllInformation(db.rawQuery(selectPersonQuery, query));
-                if (tempTable.size() > 0) {
-                    if (table == null)
-                        table = tempTable;
-                    else
-                        table.add(tempTable.get(0));
-                    insertTableInList(table);
-                }
-                else
-                    Toast.makeText(this, "No such person found!", Toast.LENGTH_LONG).show();
+                String[] selectWhereArgs = {data.getStringExtra("SelectQuery")};
+                searchQueryAndInsertInListView(selectWhereArgs, dbHelper.RAWQUERY + " where name = ? ");
                 break;
             case 1:
                 if (data == null) {
@@ -161,6 +183,61 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Log.d(LOG_TAG, "--- onActivityResult Edit person---");
                 String lastPersonID = table.get(table.size() - 1).get(0);
                 dbHelper.updatePeople(db, lastPersonID, data.getStringExtra("UpdateName"), data.getStringExtra("UpdateRoomID"), data.getStringExtra("UpdateStaticPhoneID"), data.getStringExtra("UpdateMobilePhoneID"), data.getStringExtra("UpdatePositionID"));
+                if (dropLastTableElement()) {
+                    String[] updateWhereArgs = {data.getStringExtra("UpdateName")};
+                    searchQueryAndInsertInListView(updateWhereArgs, dbHelper.RAWQUERY + " where name = ? ");
+                }
+                break;
+            case 2:
+                if (data == null) {
+                    return;
+                }
+                Log.d(LOG_TAG, "--- onActivityResult Search person---");
+                //SearchName SearchRoom SearchPosition
+                if (!data.getStringExtra("SearchName").equals("")) {
+                    if (!data.getStringExtra("SearchRoom").equals("")) {
+                        if (!data.getStringExtra("SearchPosition").equals("")) {
+                            String[] searchWhereArgs = {data.getStringExtra("SearchName"), data.getStringExtra("SearchRoom"), data.getStringExtra("SearchPosition")};
+                            searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where name = ? and roomName = ? and positionName = ? ");
+                        }
+                        else {
+                            String[] searchWhereArgs = {data.getStringExtra("SearchName"), data.getStringExtra("SearchRoom")};
+                            searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where name = ? and roomName = ? ");
+                        }
+                    }
+                    else {
+                        if (!data.getStringExtra("SearchPosition").equals("")) {
+                            String[] searchWhereArgs = {data.getStringExtra("SearchName"), data.getStringExtra("SearchPosition")};
+                            searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where name = ? and positionName = ? ");
+                        }
+                        else {
+                            String[] searchWhereArgs = {data.getStringExtra("SearchName")};
+                            searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where name = ? ");
+                        }
+                    }
+                }
+                else {
+                    if (!data.getStringExtra("SearchRoom").equals("")) {
+                        if (!data.getStringExtra("SearchPosition").equals("")) {
+                            String[] searchWhereArgs = {data.getStringExtra("SearchRoom"), data.getStringExtra("SearchPosition")};
+                            searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where roomName = ? and positionName = ? ");
+                        }
+                        else {
+                            String[] searchWhereArgs = {data.getStringExtra("SearchRoom")};
+                            searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where roomName = ? ");
+                        }
+                    }
+                    else {
+                        if (!data.getStringExtra("SearchPosition").equals("")) {
+                            String[] searchWhereArgs = {data.getStringExtra("SearchPosition")};
+                            searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where positionName = ? ");
+                        }
+                        else {
+                            table = dbHelper.getAllInformation(db.rawQuery(dbHelper.RAWQUERY, null));
+                            insertTableInList(table);
+                        }
+                    }
+                }
                 break;
         }
 
@@ -199,6 +276,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
     class DBHelper extends SQLiteOpenHelper {
 
         public static final String RAWQUERY = "select PL.peopleID, name, roomName, staticPhoneNumber, mobilePhoneNumber, positionName "
+                + "from people as PL "
+                + "left join room as RM on PL.roomID = RM.roomID "
+                + "left join staticPhone as SP on PL.staticPhoneID = SP.staticPhoneID "
+                + "left join mobilePhone as MP on PL.mobilePhoneID = MP.mobilePhoneID "
+                + "left join position as PS on PL.positionID = PS.positionID";
+
+        public static final String EDITINFOQUERY = "select PL.peopleID, name, PL.roomID, PL.staticPhoneID, PL.mobilePhoneID, PL.positionID "
                 + "from people as PL "
                 + "left join room as RM on PL.roomID = RM.roomID "
                 + "left join staticPhone as SP on PL.staticPhoneID = SP.staticPhoneID "
@@ -276,7 +360,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             cv.put("mobilePhoneID", mobilePhoneID);
             cv.put("positionID", positionID);
             String[] whereArg= {peopleID};
-            long rowID = db.update("people", cv, " where peopleID = ? ", whereArg);
+            long rowID = db.update("people", cv, " peopleID = ? ", whereArg);
             String padding = "";
             if (rowID < 10) padding = "00";
             if (rowID >= 10 && rowID < 100) padding = "0";
@@ -346,12 +430,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 int positionColIndex = c.getColumnIndex("positionName");
                 do {
                     List<String> temp = new ArrayList<>();
-                    temp.add("ID: " + c.getString(peopleIDColIndex));
-                    temp.add("Name: " + c.getString(nameColIndex));
-                    temp.add("Room: " + c.getString(roomColIndex));
-                    temp.add("StaticPhoneNr: " + c.getString(staticPhoneColIndex));
-                    temp.add("MobilePhoneNr: " + c.getString(mobilePhoneColIndex));
-                    temp.add("Position: " + c.getString(positionColIndex));
+                    temp.add(c.getString(peopleIDColIndex));
+                    temp.add(c.getString(nameColIndex));
+                    temp.add(c.getString(roomColIndex));
+                    temp.add(c.getString(staticPhoneColIndex));
+                    temp.add(c.getString(mobilePhoneColIndex));
+                    temp.add(c.getString(positionColIndex));
                     table.add(temp);
 
                     Log.d(LOG_TAG,
@@ -361,6 +445,41 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                     ", STATIC-PHONE = " + c.getString(staticPhoneColIndex) +
                                     ", MOBILE-PHONE = " + c.getString(mobilePhoneColIndex) +
                                     ", POSITION = " + c.getString(positionColIndex));
+                } while (c.moveToNext());
+            } else {
+                Log.d(LOG_TAG, "0 rows");
+            }
+            return table;
+        }
+
+        public List<List<String>> getAllIDsAndName(Cursor c) {
+            Log.d(LOG_TAG, "--- on getAllIDsAndName ---");
+            List<List<String>> table = new ArrayList<>();
+            if (c.moveToFirst()) {
+                //find the column numbers using names
+                int peopleIDColIndex = c.getColumnIndex("peopleID");
+                int nameColIndex = c.getColumnIndex("name");
+                int roomColIndex = c.getColumnIndex("roomID");
+                int staticPhoneColIndex = c.getColumnIndex("staticPhoneID");
+                int mobilePhoneColIndex = c.getColumnIndex("mobilePhoneID");
+                int positionColIndex = c.getColumnIndex("positionID");
+                do {
+                    List<String> temp = new ArrayList<>();
+                    temp.add(c.getString(peopleIDColIndex));
+                    temp.add(c.getString(nameColIndex));
+                    temp.add(c.getString(roomColIndex));
+                    temp.add(c.getString(staticPhoneColIndex));
+                    temp.add(c.getString(mobilePhoneColIndex));
+                    temp.add(c.getString(positionColIndex));
+                    table.add(temp);
+
+                    Log.d(LOG_TAG,
+                            "People ID = " + c.getString(peopleIDColIndex) +
+                                    ", NAME = " + c.getString(nameColIndex) +
+                                    ", ROOM ID = " + c.getString(roomColIndex) +
+                                    ", STATIC-PHONE ID = " + c.getString(staticPhoneColIndex) +
+                                    ", MOBILE-PHONE ID = " + c.getString(mobilePhoneColIndex) +
+                                    ", POSITION ID = " + c.getString(positionColIndex));
                 } while (c.moveToNext());
             } else {
                 Log.d(LOG_TAG, "0 rows");
@@ -389,7 +508,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             addPeople(db, "peopleID_002", "Mark Wallberg", "roomID_002", "staticPhoneID_002", "mobilePhoneID_002", "positionID_002");
             addPeople(db, "peopleID_003", "Bill Gates", "roomID_003", "staticPhoneID_003", "mobilePhoneID_003", "positionID_003");
             addPeople(db, "peopleID_004", "Dieter Bohlen", "roomID_003", "staticPhoneID_004", "mobilePhoneID_004", "positionID_002");
-            addPeople(db, "peopleID_005", "Jason Sttham", "roomID_003", "staticPhoneID_005", "", "positionID_002");
+            addPeople(db, "peopleID_005", "Jason Statham", "roomID_003", "staticPhoneID_005", "", "positionID_002");
             addPeople(db, "peopleID_006", "Brad Pit", "roomID_004", "staticPhoneID_006", "", "positionID_002");
             addPeople(db, "peopleID_007", "Michael Mueller", "roomID_004", "staticPhoneID_007", "", "positionID_002");
             addPeople(db, "peopleID_008", "Andre Marr", "roomID_005", "staticPhoneID_008", "", "positionID_002");

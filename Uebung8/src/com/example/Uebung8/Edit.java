@@ -49,20 +49,31 @@ public class Edit extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnStartUpdate:
-                if (!etUpdateName.getText().toString().isEmpty() && !etUpdateRoomID.getText().toString().isEmpty() && !etUpdateStaticPhoneID.getText().toString().isEmpty() && !etUpdateMobilePhoneID.getText().toString().isEmpty() && !etUpdatePositionID.getText().toString().isEmpty()) {
-                    Intent intent = new Intent();
+                Intent intent = new Intent();
+                if (!etUpdateName.getText().toString().isEmpty())
                     intent.putExtra("UpdateName", etUpdateName.getText().toString());
+                else
+                    intent.putExtra("UpdateName", "");
+                if (!etUpdateRoomID.getText().toString().isEmpty())
                     intent.putExtra("UpdateRoomID", etUpdateRoomID.getText().toString());
+                else
+                    intent.putExtra("UpdateRoomID", "");
+                if (!etUpdateStaticPhoneID.getText().toString().isEmpty())
                     intent.putExtra("UpdateStaticPhoneID", etUpdateStaticPhoneID.getText().toString());
+                else
+                    intent.putExtra("UpdateStaticPhoneID", "");
+                if (!etUpdateMobilePhoneID.getText().toString().isEmpty())
                     intent.putExtra("UpdateMobilePhoneID", etUpdateMobilePhoneID.getText().toString());
-                    intent.putExtra("UpdatePosition", etUpdateName.getText().toString());
-                    //Toast.makeText(this, intent.getStringExtra("SelectQuery"), Toast.LENGTH_LONG).show();
-                    setResult(RESULT_OK, intent);
-                } else {
-                    Toast.makeText(this, "Do not forget to enter every information! You can`t just leave something empty here", Toast.LENGTH_LONG).show();
-                }
+                else
+                    intent.putExtra("UpdateMobilePhoneID", "");
+                if (!etUpdatePositionID.getText().toString().isEmpty())
+                    intent.putExtra("UpdatePositionID", etUpdatePositionID.getText().toString());
+                else
+                    intent.putExtra("UpdatePositionID", "");
+                setResult(RESULT_OK, intent);
                 finish();
                 break;
         }
+
     }
 }

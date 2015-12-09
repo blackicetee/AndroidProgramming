@@ -14,5 +14,6 @@
         </activity>
         <activity android:name=".Select" android:label="SelectPerson"/>
         <activity android:name=".Edit" android:label="Edit Person"/>
+        <activity android:name=".Search" android:label="Search in DB"/>
     </application>
 </manifest>
