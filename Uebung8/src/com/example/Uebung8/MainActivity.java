@@ -105,7 +105,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
                 else if (!table.isEmpty()) {
                     String[] query = {table.get(table.size() - 1).get(1)};
-                    String editPersonQuery = dbHelper.EDITINFOQUERY + " where name = ? ";
+                    String editPersonQuery = dbHelper.EDITINFOQUERY;
                     List<List<String>> tempTable = dbHelper.getAllIDsAndName(db.rawQuery(editPersonQuery, query));
                     Intent editIntent = new Intent(this, Edit.class);
                     editIntent.putExtra("UpdateName", tempTable.get(tempTable.size() - 1).get(1));
@@ -287,7 +287,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 + "left join room as RM on PL.roomID = RM.roomID "
                 + "left join staticPhone as SP on PL.staticPhoneID = SP.staticPhoneID "
                 + "left join mobilePhone as MP on PL.mobilePhoneID = MP.mobilePhoneID "
-                + "left join position as PS on PL.positionID = PS.positionID";
+                + "left join position as PS on PL.positionID = PS.positionID "
+                +  "where name = ? ";
 
         public DBHelper(Context context) {
             super(context, "myDB1", null, 1);
