@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Uebung10</string>
+    <string name="StartService">Start Service</string>
+    <string name="stopService">Stop Service</string>
+</resources>
