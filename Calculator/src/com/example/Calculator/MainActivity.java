@@ -114,8 +114,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     addTerm(".");
                 break;
             case R.id.btnAdd:
-                    result += Double.parseDouble(tvMain.getText().toString());
-                    tvMain.setText("");
+                result += Double.parseDouble(tvMain.getText().toString());
+                tvMain.setText("");
                 break;
             case R.id.btnSub:
 
@@ -131,11 +131,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
         }
     }
+
     private void addTerm(String number) {
         if (tvMain.getText().toString().equals("Large Text")) {
             tvMain.setText(number);
-        }
-        else {
+        } else {
             String tmp = tvMain.getText().toString();
             tmp += number;
             tvMain.setText(tmp);

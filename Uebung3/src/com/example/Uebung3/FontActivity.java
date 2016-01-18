@@ -16,7 +16,7 @@ public class FontActivity extends Activity implements View.OnClickListener {
     Button btnSmall;
     Button btnMedium;
     Button btnLarge;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

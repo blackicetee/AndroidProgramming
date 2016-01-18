@@ -45,7 +45,7 @@ public class Alarm extends Activity implements View.OnClickListener {
                 int hours = 0;
                 int minutes = 0;
                 if (!etAlarmMassage.getText().toString().isEmpty()) {
-                    massage =  etAlarmMassage.getText().toString();
+                    massage = etAlarmMassage.getText().toString();
                 }
                 if (!etAlarmHours.getText().toString().isEmpty()) {
                     hours = Integer.parseInt(etAlarmHours.getText().toString());

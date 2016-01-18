@@ -16,6 +16,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     String[] names = {""};
     List<String> resultList = new ArrayList<>();
     Button btnCalc;
+
     /**
      * Called when the activity is first created.
      */
@@ -44,17 +45,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 if (resultList.size() < 15) {
                     Intent intent = new Intent("htw.berlin.s0539757.intent.action.Calculator");
                     startActivityForResult(intent, 1);
-                }
-                else {
+                } else {
                     Toast.makeText(this, "You can`t add more items to the List, because you reached the maximum of 10 items!", Toast.LENGTH_LONG).show();
                 }
                 break;
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         ListView lvMain = (ListView) findViewById(R.id.lvMain);
-        if (data == null) {return;}
+        if (data == null) {
+            return;
+        }
         Double result = data.getDoubleExtra("CalculatedResult", 0);
         //Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show();
 

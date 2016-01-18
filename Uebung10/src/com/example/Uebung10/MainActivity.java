@@ -32,12 +32,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     };
 
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("myServiceUpdate"));
     }
 
-    protected void onPause (){
+    protected void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
     }

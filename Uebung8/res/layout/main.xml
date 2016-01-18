@@ -25,7 +25,8 @@
                 android:id="@+id/btnSelect"/>
     </LinearLayout>
     <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
-                  android:layout_height="wrap_content" android:id="@+id/linearLayout" android:layout_gravity="center_horizontal">
+                  android:layout_height="wrap_content" android:id="@+id/linearLayout"
+                  android:layout_gravity="center_horizontal">
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Edit last person"
                 android:id="@+id/btnEdit"/>
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Search in DB"

@@ -102,8 +102,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btnEdit:
                 if (table == null) {
                     Toast.makeText(this, "The list is empty!", Toast.LENGTH_LONG).show();
-                }
-                else if (!table.isEmpty()) {
+                } else if (!table.isEmpty()) {
                     String[] query = {table.get(table.size() - 1).get(1)};
                     String editPersonQuery = dbHelper.EDITINFOQUERY;
                     List<List<String>> tempTable = dbHelper.getAllIDsAndName(db.rawQuery(editPersonQuery, query));
@@ -114,8 +113,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     editIntent.putExtra("UpdateMobilePhoneID", tempTable.get(tempTable.size() - 1).get(4));
                     editIntent.putExtra("UpdatePosition", tempTable.get(tempTable.size() - 1).get(5));
                     startActivityForResult(editIntent, 1);
-                }
-                else {
+                } else {
                     Toast.makeText(this, "The list is empty!", Toast.LENGTH_LONG).show();
                 }
                 break;
@@ -126,14 +124,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btnCall:
                 if (table == null) {
                     Toast.makeText(this, "No static number found!", Toast.LENGTH_LONG).show();
-                }
-                else if (table.size() > 0) {
+                } else if (table.size() > 0) {
                     String staticNumber = table.get(table.size() - 1).get(3);
                     Intent callIntent = new Intent(Intent.ACTION_DIAL);
                     callIntent.setData(Uri.parse("tel:" + staticNumber));
                     startActivity(callIntent);
-                }
-                else {
+                } else {
                     Toast.makeText(this, "No static number found!", Toast.LENGTH_LONG).show();
                 }
                 break;
@@ -160,8 +156,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
             }
             insertTableInList(table);
-        }
-        else
+        } else
             Toast.makeText(this, "Not found in DB!", Toast.LENGTH_LONG).show();
     }
 
@@ -199,40 +194,33 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         if (!data.getStringExtra("SearchPosition").equals("")) {
                             String[] searchWhereArgs = {data.getStringExtra("SearchName"), data.getStringExtra("SearchRoom"), data.getStringExtra("SearchPosition")};
                             searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where name = ? and roomName = ? and positionName = ? ");
-                        }
-                        else {
+                        } else {
                             String[] searchWhereArgs = {data.getStringExtra("SearchName"), data.getStringExtra("SearchRoom")};
                             searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where name = ? and roomName = ? ");
                         }
-                    }
-                    else {
+                    } else {
                         if (!data.getStringExtra("SearchPosition").equals("")) {
                             String[] searchWhereArgs = {data.getStringExtra("SearchName"), data.getStringExtra("SearchPosition")};
                             searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where name = ? and positionName = ? ");
-                        }
-                        else {
+                        } else {
                             String[] searchWhereArgs = {data.getStringExtra("SearchName")};
                             searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where name = ? ");
                         }
                     }
-                }
-                else {
+                } else {
                     if (!data.getStringExtra("SearchRoom").equals("")) {
                         if (!data.getStringExtra("SearchPosition").equals("")) {
                             String[] searchWhereArgs = {data.getStringExtra("SearchRoom"), data.getStringExtra("SearchPosition")};
                             searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where roomName = ? and positionName = ? ");
-                        }
-                        else {
+                        } else {
                             String[] searchWhereArgs = {data.getStringExtra("SearchRoom")};
                             searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where roomName = ? ");
                         }
-                    }
-                    else {
+                    } else {
                         if (!data.getStringExtra("SearchPosition").equals("")) {
                             String[] searchWhereArgs = {data.getStringExtra("SearchPosition")};
                             searchQueryAndInsertInListView(searchWhereArgs, dbHelper.RAWQUERY + " where positionName = ? ");
-                        }
-                        else {
+                        } else {
                             table = dbHelper.getAllInformation(db.rawQuery(dbHelper.RAWQUERY, null));
                             insertTableInList(table);
                         }
@@ -247,12 +235,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (table == null) {
             Toast.makeText(this, "The list is empty!", Toast.LENGTH_LONG).show();
             return false;
-        }
-        else if (!table.isEmpty()) {
+        } else if (!table.isEmpty()) {
             table.remove(table.size() - 1);
             return true;
-        }
-        else {
+        } else {
             Toast.makeText(this, "The list is empty!", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -288,7 +274,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 + "left join staticPhone as SP on PL.staticPhoneID = SP.staticPhoneID "
                 + "left join mobilePhone as MP on PL.mobilePhoneID = MP.mobilePhoneID "
                 + "left join position as PS on PL.positionID = PS.positionID "
-                +  "where name = ? ";
+                + "where name = ? ";
 
         public DBHelper(Context context) {
             super(context, "myDB1", null, 1);
@@ -360,7 +346,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             cv.put("staticPhoneID", staticPhoneID);
             cv.put("mobilePhoneID", mobilePhoneID);
             cv.put("positionID", positionID);
-            String[] whereArg= {peopleID};
+            String[] whereArg = {peopleID};
             long rowID = db.update("people", cv, " peopleID = ? ", whereArg);
             String padding = "";
             if (rowID < 10) padding = "00";

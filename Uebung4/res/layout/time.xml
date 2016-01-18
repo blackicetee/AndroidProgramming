@@ -9,6 +9,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvTime" android:layout_gravity="center"
             android:layout_weight="0.18" android:gravity="center_vertical|center_horizontal"
-            android:layout_marginTop="@dimen/topMargin" android:textSize="@dimen/textSize" android:textIsSelectable="false"
+            android:layout_marginTop="@dimen/topMargin" android:textSize="@dimen/textSize"
+            android:textIsSelectable="false"
             />
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.os.Handler;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -33,6 +34,7 @@ public class MyService extends Service {
         es = Executors.newFixedThreadPool(1);
         h.postDelayed(new Runnable() {
             private long time = 0;
+
             @Override
             public void run() {
                 for (String stoppedTask : stoppedTasks) {

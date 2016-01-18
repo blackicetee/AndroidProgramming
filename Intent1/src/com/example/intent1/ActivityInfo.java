@@ -26,8 +26,7 @@ public class ActivityInfo extends Activity {
         if (action.equals("intent.action.showTime")) {
             format = "HH:mm:ss";
             textInfo = "Time: ";
-        }
-        else if (action.equals("intent.action.showDate")) {
+        } else if (action.equals("intent.action.showDate")) {
             format = "dd.MM.yyyy";
             textInfo = "Date: ";
         }

@@ -12,7 +12,7 @@ import android.widget.Toast;
  * Created by Jason on 22.11.2015.
  */
 
-public class GoogleSearchActivity extends Activity implements View.OnClickListener{
+public class GoogleSearchActivity extends Activity implements View.OnClickListener {
 
     EditText etGoogleSearch;
     Button btnSearch;

@@ -44,8 +44,7 @@ public class TestActivity extends Activity implements View.OnClickListener {
             case R.id.btnIsEmpty:
                 if (intent.getStringExtra("EditTextInput").equals("")) {
                     intent.putExtra("test", "Is empty!");
-                }
-                else {
+                } else {
                     intent.putExtra("test", "Is not empty!");
                 }
                 break;
