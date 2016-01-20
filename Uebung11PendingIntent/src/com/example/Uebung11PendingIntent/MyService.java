@@ -3,9 +3,12 @@ package com.example.Uebung11PendingIntent;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -15,16 +18,40 @@ import java.util.concurrent.TimeUnit;
  */
 public class MyService extends Service {
     final String LOG_TAG = "myServiceLogs";
+    Handler h = new Handler();
+    List<String> finishedTasksInTheLast60Sec = new ArrayList<>();
     ExecutorService es;
+    PendingIntent pi;
+    Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            sendPendingIntent();
+            h.postDelayed(this, 60000);
+            finishedTasksInTheLast60Sec = new ArrayList<>();
+        }
+    };
+
+    private void sendPendingIntent() {
+        Intent intent = new Intent();
+        intent.putExtra(MainActivity.PARAM_RESULT, (ArrayList<String>) finishedTasksInTheLast60Sec);
+        try {
+            pi.send(MyService.this, MainActivity.STATUS_FINISH, intent);
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void onCreate() {
         super.onCreate();
         Log.d(LOG_TAG, "MyService onCreate");
         es = Executors.newFixedThreadPool(1);
+        h.postDelayed(r, 60000);
     }
 
     public void onDestroy() {
         super.onDestroy();
+        h.removeCallbacks(r);
+        es.shutdownNow();
         Log.d(LOG_TAG, "MyService onDestroy ");
     }
 
@@ -32,9 +59,8 @@ public class MyService extends Service {
         Log.d(LOG_TAG, "MyService onStartCommand");
         readFlags(flags);
         int time = intent.getIntExtra(MainActivity.PARAM_TIME, 1);
-        int taskCode = intent.getIntExtra(MainActivity.PARAM_TASKCODE, 1);
-        PendingIntent pi = intent.getParcelableExtra(MainActivity.PARAM_PINTENT);
-        MyRun mr = new MyRun(time, taskCode, pi);
+        pi = intent.getParcelableExtra(MainActivity.PARAM_PINTENT);
+        MyRun mr = new MyRun(time, startId);
         es.execute(mr);
         return START_NOT_STICKY;
         //return START_STICKY;
@@ -57,12 +83,10 @@ public class MyService extends Service {
     class MyRun implements Runnable {
         int time;
         int startId;
-        PendingIntent pi;
 
-        public MyRun(int time, int startId, PendingIntent pi) {
+        public MyRun(int time, int startId) {
             this.time = time;
             this.startId = startId;
-            this.pi = pi;
             Log.d(LOG_TAG, "MyRun#" + startId + " create");
         }
 
@@ -78,13 +102,8 @@ public class MyService extends Service {
         }
 
         private void stop() {
-            Intent intent = new Intent().putExtra(MainActivity.PARAM_RESULT, "Finished Task: MyRun#" + startId);
-            try {
-                pi.send(MyService.this, MainActivity.STATUS_FINISH, intent);
-            } catch (PendingIntent.CanceledException e) {
-                e.printStackTrace();
-            }
-            Log.d(LOG_TAG, "MyRun#" + startId + " end, stopSelfResult(" + startId + ") = " + stopSelfResult(startId));
+            finishedTasksInTheLast60Sec.add("Finished Task: MyRun#" + startId);
+            Log.d(LOG_TAG, "MyRun#" + startId + " end)");
         }
     }
 }

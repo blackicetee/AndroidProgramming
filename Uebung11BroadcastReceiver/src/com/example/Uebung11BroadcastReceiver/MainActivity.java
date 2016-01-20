@@ -25,16 +25,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public final static String PARAM_RESULT = "result";
     public final static String BROADCAST_ACTION = "com.example.Uebung11BroadcastReceiver.s0539757.htw-berlin.de";
     private final static String LOG_TAG = "mainActivityLogs:";
-    private List<String> finishedTasks = new ArrayList<>();
+    private List<String> finishedTasksInTheLast60Sec = new ArrayList<>();
     private int taskCode = 0;
-    private final Handler h = new Handler();
     Button btnStartService;
     ListView listView;
     BroadcastReceiver br;
 
-    /**
-     * Called when the activity is first created.
-     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopService(new Intent(this, MyService.class));
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,12 +53,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         br = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                finishedTasks.add(intent.getStringExtra(PARAM_RESULT));
+                finishedTasksInTheLast60Sec = intent.getStringArrayListExtra(PARAM_RESULT);
+                insertListInListView(finishedTasksInTheLast60Sec);
             }
         };
         IntentFilter intentFilter = new IntentFilter(BROADCAST_ACTION);
         registerReceiver(br, intentFilter);
-        postFinishedTasks60Sec();
     }
 
     public void onClickStart(View v) {
@@ -78,17 +85,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         startService(intent);
     }
 
-    private void postFinishedTasks60Sec() {
-        h.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                insertListInListView(finishedTasks);
-
-                h.postDelayed(this, 60000);
-            }
-        }, 60000);
-    }
-
     private void insertListInListView(List<String> l) {
         if (l.size() > 0) {
             String[] stringArray = l.toArray(new String[l.size()]);
@@ -96,9 +92,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     new ArrayAdapter<>(this,
                             android.R.layout.simple_list_item_1, stringArray);
             listView.setAdapter(adapter);
-        }
-        else {
-            Toast.makeText(this, "There are no finished Tasks yet!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "List is empty!", Toast.LENGTH_LONG).show();
+            listView.setAdapter(null);
         }
     }
 }
