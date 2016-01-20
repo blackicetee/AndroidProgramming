@@ -12,7 +12,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -20,7 +24,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     final String LOG_TAG = "mainActivityLogs";
     Button btnStartService;
 
-    private int finishedTasks = 0;
+    private int numberOfFinishedTasks = 0;
+    private List<String> finishedTasksInTheLast60Sec = new ArrayList<>();
     private int startedTasks = 0;
     private ProgressBar pbService;
     private Handler progressHandler = new Handler();
@@ -28,7 +33,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            finishedTasks = intent.getIntExtra("stoppedTasks", 0);
+            finishedTasksInTheLast60Sec = intent.getStringArrayListExtra("finishedTasks");
+            if (finishedTasksInTheLast60Sec != null) {
+                numberOfFinishedTasks += finishedTasksInTheLast60Sec.size();
+                for (String finishedTask : finishedTasksInTheLast60Sec) {
+                    Log.d(LOG_TAG, finishedTask);
+                }
+            } else Toast.makeText(getApplicationContext(), "You need to start new services if you want to log more finished tasks!", Toast.LENGTH_LONG).show();
         }
     };
 
@@ -43,6 +54,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopService(new Intent(this, MyService.class));
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "MainActivity onCreate");
         super.onCreate(savedInstanceState);
@@ -51,23 +74,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         pbService = (ProgressBar) findViewById(R.id.pbService);
 
         btnStartService.setOnClickListener(this);
-
-        new Thread(new Runnable() {
-            public void run() {
-                while (finishedTasks < 100) {
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    progressHandler.post(new Runnable() {
-                        public void run() {
-                            pbService.setProgress(finishedTasks);
-                        }
-                    });
-                }
-            }
-        }).start();
     }
 
     public void onClickStart(View v) {
@@ -77,6 +83,39 @@ public class MainActivity extends Activity implements View.OnClickListener {
         startService(new Intent(this, MyService.class).putExtra("time", 4));
         startService(new Intent(this, MyService.class).putExtra("time", 10));
         startedTasks += 4;
+        pbService.setMax(startedTasks);
+        Log.d(LOG_TAG, "New max progress bar: " + startedTasks);
+        processProgressBar();
+    }
+
+    private void processProgressBar() {
+        new Thread(new Runnable() {
+            public void run() {
+                while (numberOfFinishedTasks < startedTasks) {
+                    postProgress(numberOfFinishedTasks);
+                    holdProgressFor(1);
+                }
+                postProgress(numberOfFinishedTasks);
+            }
+        }).start();
+    }
+
+    private void postProgress(int progress) {
+        progressHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                pbService.setProgress(progress);
+                //Log.d(LOG_TAG, "Progress: " + progressStatus + "/" + pbService.getMax());
+            }
+        });
+    }
+
+    private void holdProgressFor(int timeInSec) {
+        try {
+            TimeUnit.SECONDS.sleep(timeInSec);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

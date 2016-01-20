@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,13 +19,21 @@ import java.util.concurrent.TimeUnit;
  */
 public class MyService extends Service {
     final String LOG_TAG = "myServiceLogs";
-    final Handler h = new Handler();
-    List<String> stoppedTasks = new ArrayList<>();
+    Handler h = new Handler();
+    List<String> finishedTasksInTheLast60Sec = new ArrayList<>();
     ExecutorService es;
+    Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            sendBroadcast(finishedTasksInTheLast60Sec);
+            h.postDelayed(this, 60000);
+            finishedTasksInTheLast60Sec = new ArrayList<>();
+        }
+    };
 
-    private void sendBroadcast(int stoppedTasks) {
+    private void sendBroadcast(List<String> finishedTasks) {
         Intent intent = new Intent("myServiceUpdate");
-        intent.putExtra("stoppedTasks", stoppedTasks);
+        intent.putExtra("finishedTasks", (ArrayList<String>) finishedTasks);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -32,24 +41,15 @@ public class MyService extends Service {
         super.onCreate();
         Log.d(LOG_TAG, "MyService onCreate");
         es = Executors.newFixedThreadPool(1);
-        h.postDelayed(new Runnable() {
-            private long time = 0;
+        h.postDelayed(r, 60000);
 
-            @Override
-            public void run() {
-                for (String stoppedTask : stoppedTasks) {
-                    Log.d(LOG_TAG, stoppedTask);
-                }
-                time += 60000;
-                Log.d(LOG_TAG, "Going for... " + time);
-                h.postDelayed(this, 60000);
-            }
-        }, 60000);
     }
 
     public void onDestroy() {
         super.onDestroy();
-        Log.d(LOG_TAG, "MyService onDestroy");
+        h.removeCallbacks(r);
+        es.shutdownNow();
+        Log.d(LOG_TAG, "MyService onDestroy ");
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -57,7 +57,17 @@ public class MyService extends Service {
         readFlags(flags);
         int time = intent.getIntExtra("time", 1);
         MyRun mr = new MyRun(time, startId);
-        es.execute(mr);
+        Thread t = new Thread(mr);
+        es.execute(t);
+        /**Future mrF = es.submit(mr);
+        if (startId == 8) {
+            try {
+                TimeUnit.SECONDS.sleep(3);
+                t.interrupt();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }*/
         return START_NOT_STICKY;
         //return START_STICKY;
         //return START_REDELIVER_INTENT;
@@ -98,9 +108,8 @@ public class MyService extends Service {
         }
 
         private void stop() {
-            stoppedTasks.add("Finished Task: MyRun#" + startId);
-            Log.d(LOG_TAG, "MyRun#" + startId + " end, stopSelfResult(" + startId + ") = " + stopSelfResult(startId));
-            sendBroadcast(stoppedTasks.size());
+            finishedTasksInTheLast60Sec.add("Finished Task: MyRun#" + startId);
+            Log.d(LOG_TAG, "MyRun#" + startId + " end)");
         }
     }
 }
