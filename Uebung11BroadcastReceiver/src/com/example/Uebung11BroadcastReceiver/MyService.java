@@ -33,9 +33,6 @@ public class MyService extends Service {
     private void sendBroadcastToMain() {
         Intent intent = new Intent(MainActivity.BROADCAST_ACTION);
         intent.putExtra(MainActivity.PARAM_RESULT, (ArrayList<String>) finishedTasksInTheLast60Sec);
-        for (String s : intent.getStringArrayListExtra(MainActivity.PARAM_RESULT)) {
-            Log.d(LOG_TAG, s);
-        }
         sendBroadcast(intent);
     }
 
