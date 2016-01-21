@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class SensorService extends Service {
@@ -20,7 +21,8 @@ public class SensorService extends Service {
     final String LOG_TAG = "mySensorServiceLogs";
     SensorManager sensorManager;
     List<Sensor> sensorList;
-    Sensor sensorTemp;
+    List<String> sensorDescriptionList = new ArrayList<>();
+    Sensor sensorLight;
     Handler h = new Handler();
     Runnable r = new Runnable() {
         @Override
@@ -32,10 +34,9 @@ public class SensorService extends Service {
 
     private void sendBroadcastToMain() {
         Intent intent = new Intent(MainActivity.BROADCAST_ACTION);
-        //if (sensorTemp != null) sensorResult = getInfoAboutSensor(sensorTemp);
-        intent.putExtra(MainActivity.PARAM_RESULT, sensorResult);
-        Log.d(LOG_TAG, intent.getStringExtra(MainActivity.PARAM_RESULT));
+        intent.putExtra(MainActivity.PARAM_RESULT, (ArrayList<String>) sensorDescriptionList);
         sendBroadcast(intent);
+        registerSensorLight();
     }
 
     public void onCreate() {
@@ -54,38 +55,31 @@ public class SensorService extends Service {
         Log.d(LOG_TAG, "SensorService onStartCommand");
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
-        sensorTemp = sensorManager.getDefaultSensor(7);
-        sensorTemp.getName();
-        showAllTypesOfSensors();
-        //registerSensorLight();
-        //sensorResult = getInfoAboutSensor(sensorTemp);
+        sensorLight = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        registerSensorLight();
+        //showAllTypesOfSensors();
+        //sensorResult = Integer.toString(Sensor.TYPE_AMBIENT_TEMPERATURE); = 13
         return START_NOT_STICKY;
     }
 
     public void showAllTypesOfSensors() {
-        sensorManager.unregisterListener(listenerLight, sensorTemp);
-        StringBuilder sb = new StringBuilder();
-
+        sensorManager.unregisterListener(listenerLight, sensorLight);
         for (Sensor sensor : sensorList) {
-            sb.append("name = ").append(sensor.getName()).append(", type = ")
-                    .append(sensor.getType()).append("\nvendor = ")
-                    .append(sensor.getVendor()).append(", version = ")
-                    .append(sensor.getVersion()).append("\nmax = ")
-                    .append(sensor.getMaximumRange()).append(", resolution = ")
-                    .append(sensor.getResolution())
-                    .append("\n-----------------------------------------------\n");
+            sensorDescriptionList.add(getInfoAboutSensor(sensor));
         }
-
-        sensorResult = sb.toString();
     }
 
     public String getInfoAboutSensor(Sensor sensor) {
-        return "name = " + sensor.getName() + ", type = " + sensor.getType() + "\nvendor = " + sensor.getVendor() + ", version = " + sensor.getVersion() + "\nmax = " + sensor.getMaximumRange() + ", resolution = " + sensor.getResolution() + "\n-----------------------------------------------\n";
+        return "name = " + sensor.getName() + ", type = " + sensor.getType() + "\nvendor = " + sensor.getVendor() + ", version = " + sensor.getVersion() + "\nmax = " + sensor.getMaximumRange() + ", resolution = " + sensor.getResolution();
     }
 
 
     public void registerSensorLight() {
-        sensorManager.registerListener(listenerLight, sensorTemp, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(listenerLight, sensorLight, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    public void unregisterSensorLight() {
+        sensorManager.unregisterListener(listenerLight);
     }
 
     SensorEventListener listenerLight = new SensorEventListener() {
@@ -97,7 +91,12 @@ public class SensorService extends Service {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            sensorResult = String.valueOf(event.values[0]);
+            Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minutes = c.get(Calendar.MINUTE);
+            int seconds = c.get(Calendar.SECOND);
+            sensorDescriptionList.add(0, "Time: " + hour + ":" + minutes + ":" + seconds + " Brightness: " + String.valueOf(event.values[0]) + " lx");
+            unregisterSensorLight();
         }
     };
 

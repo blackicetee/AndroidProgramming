@@ -35,6 +35,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         stopService(new Intent(this, MyService.class));
+        unregisterReceiver(br);
     }
 
     @Override
